@@ -55,7 +55,8 @@ export default function Home({ onOpen }) {
           <li>先嘗試回想術語，再點（或用鍵盤 Enter／空白鍵）揭開核對。</li>
           <li>「顯示全部」會揭開所有標籤；「全部遮住」只遮住、點擊不會揭開，方便先看結構。</li>
           <li>「重新遮住」會再次遮蓋所有術語。與術語一併顯示的短中文提示會被遮蓋，避免直接洩漏答案。</li>
-          <li>在「資料類型與學習類型」一頁，每張卡片另有較詳的描述；遮住標籤時描述仍可閱讀，用來估官方術語，但不會寫出該答案。</li>
+          <li>卡片上的學習描述改為英文。遮住官方術語時，請先讀描述再估答案；描述不會寫出該術語。</li>
+          <li>右手邊「官方參考」依 Skill Builder Domain 1 Review 的 Domain → Task Statement → Lesson 結構整理筆記。請登入 Skill Builder 開啟官方課程。</li>
         </ol>
       </div>
       <OfficialReference variant="home" />
