@@ -49,6 +49,13 @@ export const BOARDS = {
   },
 };
 
+export const BOARD_ORDER = [
+  { id: "hierarchy", homeTitle: "1. AI hierarchy" },
+  { id: "train-fit", homeTitle: "2. Training, inferencing, and fit" },
+  { id: "inferencing", homeTitle: "3. Inferencing types" },
+  { id: "data-learning", homeTitle: "4. Data types and learning types" },
+];
+
 const MODES = [
   { id: "show", label: "顯示全部" },
   { id: "hide", label: "全部遮住" },
@@ -143,9 +150,38 @@ export default function BoardView({ boardId }) {
           <Board />
         </div>
       </TermContext.Provider>
+      <BoardPager boardId={boardId} />
       </div>
       <OfficialReference boardId={boardId} />
       </div>
     </section>
+  );
+}
+
+function BoardPager({ boardId }) {
+  const index = BOARD_ORDER.findIndex((item) => item.id === boardId);
+  const next = index >= 0 && index < BOARD_ORDER.length - 1 ? BOARD_ORDER[index + 1] : null;
+
+  function go(hash) {
+    window.location.hash = hash;
+  }
+
+  if (next) {
+    return (
+      <nav className="board-pager" aria-label="練習頁面導覽">
+        <button type="button" className="pager-next" onClick={() => go(next.id)}>
+          <span className="pager-label">下一頁</span>
+          <span className="pager-target">{next.homeTitle}</span>
+        </button>
+      </nav>
+    );
+  }
+
+  return (
+    <nav className="board-pager" aria-label="練習頁面導覽">
+      <button type="button" className="pager-home" onClick={() => go("home")}>
+        返回首頁
+      </button>
+    </nav>
   );
 }

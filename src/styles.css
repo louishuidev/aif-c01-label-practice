@@ -1209,3 +1209,50 @@ main.main-board {
 .domain-map li + li {
   margin-top: 0.25rem;
 }
+
+/* Next-page navigation under each practice board */
+.board-pager {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1.15rem 0 0.25rem;
+}
+
+.pager-next,
+.pager-home {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  min-height: var(--tap);
+  min-width: 11rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--navy);
+  border-radius: 12px;
+  background: var(--navy);
+  color: var(--white);
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+.pager-home {
+  background: var(--white);
+  color: var(--navy);
+}
+
+.pager-next:hover,
+.pager-home:hover {
+  filter: brightness(1.06);
+}
+
+.pager-label {
+  font-size: 1rem;
+}
+
+.pager-target {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--white) 86%, var(--l-navy));
+}
