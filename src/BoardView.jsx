@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { TermContext } from "./TermContext.jsx";
+import OfficialReference from "./OfficialReference.jsx";
 import HierarchyBoard, {
   TERM_KEYS as HIERARCHY_KEYS,
   TITLE_EN as HIERARCHY_EN,
@@ -107,6 +108,8 @@ export default function BoardView({ boardId }) {
 
   return (
     <section className="view" id="view-board">
+      <div className="practice-layout">
+      <div className="practice-main">
       <div className="toolbar" role="group" aria-label="練習模式">
         <div className="modes">
           {MODES.map((item) => (
@@ -140,6 +143,9 @@ export default function BoardView({ boardId }) {
           <Board />
         </div>
       </TermContext.Provider>
+      </div>
+      <OfficialReference boardId={boardId} />
+      </div>
     </section>
   );
 }
