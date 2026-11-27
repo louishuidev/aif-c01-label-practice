@@ -1,51 +1,11 @@
 import { useEffect, useId, useState } from "react";
-
-export const OFFICIAL_LINKS = [
-  {
-    href: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01-domain1.html",
-    title: "Domain 1 · Task 1.1",
-    detail: "AI 與 ML 基礎：官方任務與目標",
-  },
-  {
-    href: "https://docs.aws.amazon.com/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.html",
-    title: "考試指南",
-    detail: "AWS Certified AI Practitioner 官方 Exam guide",
-  },
-  {
-    href: "https://docs.aws.amazon.com/pdfs/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.pdf",
-    title: "考試指南 PDF",
-    detail: "同一指南的官方 PDF",
-  },
-];
-
-const BOARD_FOCUS = {
-  hierarchy: {
-    heading: "與此練習圖相關的 1.1 目標",
-    points: [
-      "說明基本 AI 用語，例如 AI、ML、deep learning、neural networks、LLM、GenAI、agentic AI。",
-      "比較 AI、ML、GenAI、deep learning 與 agentic AI 的相似與相異之處。",
-    ],
-  },
-  "train-fit": {
-    heading: "與此練習圖相關的 1.1 目標",
-    points: [
-      "說明基本用語，例如 algorithm、model、training 與 inferencing、fit、bias、fairness，以及 computer vision 與 natural language processing (NLP)。",
-    ],
-  },
-  inferencing: {
-    heading: "與此練習圖相關的 1.1 目標",
-    points: [
-      "說明不同的推論類型，例如 batch、real-time、asynchronous、serverless。",
-    ],
-  },
-  "data-learning": {
-    heading: "與此練習圖相關的 1.1 目標",
-    points: [
-      "說明 AI 模型中的不同資料類型，例如 labeled 與 unlabeled、tabular、time-series、image、text，以及 structured 與 unstructured。",
-      "說明不同的 AI／ML 學習類型，例如 supervised、unsupervised、reinforcement 學習方法。",
-    ],
-  },
-};
+import {
+  BOARD_LESSONS,
+  COURSE,
+  INTRODUCTION,
+  TASK_1_1,
+  TASK_OUTLINE,
+} from "./courseNotes.js";
 
 const WIDE_QUERY = "(min-width: 68rem)";
 
@@ -67,41 +27,118 @@ function useWideLayout() {
   return wide;
 }
 
-function LinkList() {
+function CourseLink() {
   return (
-    <ul className="official-ref-links">
-      {OFFICIAL_LINKS.map((item) => (
-        <li key={item.href}>
-          <a href={item.href} target="_blank" rel="noopener noreferrer">
-            <span className="official-ref-link-title">{item.title}</span>
-            <span className="official-ref-link-detail">{item.detail}</span>
-            <span className="official-ref-external">在新分頁開啟</span>
-          </a>
-        </li>
+    <a className="official-ref-course-link" href={COURSE.url} target="_blank" rel="noopener noreferrer">
+      <span className="official-ref-link-title">Open the official Domain 1 Review course</span>
+      <span className="official-ref-link-detail">
+        Skill Builder · {COURSE.fullTitle}. Sign in to Skill Builder to open the lessons.
+      </span>
+      <span className="official-ref-external">在新分頁開啟</span>
+    </a>
+  );
+}
+
+function PointList({ points }) {
+  return (
+    <ul className="lesson-points">
+      {points.map((point) => (
+        <li key={point}>{point}</li>
       ))}
     </ul>
   );
 }
 
-function FocusBlock({ boardId }) {
-  const focus = BOARD_FOCUS[boardId];
-  if (!focus) return null;
+function LessonNotes({ highlightedIds, allowBrowse = true }) {
+  const highlightSet = new Set(highlightedIds || []);
   return (
-    <div className="official-ref-focus" data-focus-board={boardId}>
-      <h3>{focus.heading}</h3>
-      <ul>
-        {focus.points.map((point) => (
-          <li key={point}>{point}</li>
-        ))}
-      </ul>
+    <div className="lesson-stack">
+      <details className="lesson-note">
+        <summary>{INTRODUCTION.title}</summary>
+        <PointList points={INTRODUCTION.points} />
+      </details>
+      <p className="task-heading">{TASK_1_1.title}</p>
+      <p className="task-summary">{TASK_1_1.summary}</p>
+      {TASK_1_1.lessons.map((lesson) => {
+        const highlighted = highlightSet.has(lesson.id);
+        return (
+          <LessonDetails
+            key={lesson.id}
+            lesson={lesson}
+            highlighted={highlighted}
+            defaultOpen={highlighted}
+          />
+        );
+      })}
+      {allowBrowse
+        ? TASK_OUTLINE.filter((task) => task.id !== "1.1").map((task) => (
+            <div key={task.id} className="pending-task" data-task-pending={task.id}>
+              <h3>{task.title}</h3>
+              <p>
+                {task.lessonRange} · {task.note}
+              </p>
+            </div>
+          ))
+        : null}
     </div>
   );
 }
 
+function LessonDetails({ lesson, highlighted, defaultOpen }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <details
+      className={highlighted ? "lesson-note is-relevant" : "lesson-note"}
+      data-lesson={lesson.id}
+      open={open}
+      onToggle={(event) => setOpen(event.currentTarget.open)}
+    >
+      <summary>
+        {highlighted ? <span className="lesson-badge">與此練習圖最相關</span> : null}
+        <span>
+          Lesson {lesson.number}: {lesson.title}
+        </span>
+      </summary>
+      <PointList points={lesson.points} />
+    </details>
+  );
+}
+
+function OutlineMap() {
+  return (
+    <ol className="domain-map">
+      <li>
+        <strong>Domain 1 Review</strong>
+        <ol>
+          <li>{INTRODUCTION.title}</li>
+          <li>
+            {TASK_1_1.title}
+            <ol>
+              {TASK_1_1.lessons.map((lesson) => (
+                <li key={lesson.id}>
+                  Lesson {lesson.number}: {lesson.title}
+                </li>
+              ))}
+            </ol>
+          </li>
+          {TASK_OUTLINE.filter((task) => task.id !== "1.1").map((task) => (
+            <li key={task.id}>
+              {task.title}
+              <span className="pending-flag">
+                {" "}
+                · {task.lessonRange} · not yet expanded
+              </span>
+            </li>
+          ))}
+        </ol>
+      </li>
+    </ol>
+  );
+}
+
 /**
- * Official AWS documentation links and a short original summary of the
- * current board's Task 1.1 objectives. AWS docs send X-Frame-Options:
- * SAMEORIGIN, so they cannot be embedded; we link out instead.
+ * Official Skill Builder Domain 1 Review reference.
+ * Notes are original study summaries, not a transcript dump.
  */
 export default function OfficialReference({ boardId, variant = "sidebar" }) {
   const wide = useWideLayout();
@@ -109,25 +146,36 @@ export default function OfficialReference({ boardId, variant = "sidebar" }) {
   const bodyId = useId();
   const isHome = variant === "home";
   const showBody = isHome || wide || open;
+  const highlightedIds = BOARD_LESSONS[boardId] || [];
 
-  const heading = isHome ? "官方參考" : "官方參考";
   const body = (
     <div className="official-ref-body" id={bodyId} hidden={!showBody ? true : undefined}>
       <p className="official-ref-disclaimer">
-        以下是 AWS 官方考試文件的連結。本練習網頁是個人學習輔助，不是 AWS 產品，也不是官方文件。
+        Study notes below follow the official Skill Builder course structure (Domain → Task
+        Statement → Lesson). They are original summaries for personal study, not an official AWS
+        document and not a copy of the course script. Open the official course signed in to Skill
+        Builder.
       </p>
-      <p className="official-ref-embed-note">
-        官方頁面由 AWS 網站提供；該站不允許把文件嵌入本頁，請用連結在新分頁開啟原文。
-      </p>
-      <LinkList />
-      {isHome ? null : <FocusBlock boardId={boardId} />}
+      <CourseLink />
+      {isHome ? (
+        <>
+          <h3 className="map-heading">Domain / Task / Lesson map</h3>
+          <OutlineMap />
+          <details className="lesson-note">
+            <summary>{INTRODUCTION.title}</summary>
+            <PointList points={INTRODUCTION.points} />
+          </details>
+        </>
+      ) : (
+        <LessonNotes highlightedIds={highlightedIds} />
+      )}
     </div>
   );
 
   if (isHome) {
     return (
       <section className="official-ref official-ref-home" aria-labelledby="official-ref-home-title">
-        <h2 id="official-ref-home-title">{heading}</h2>
+        <h2 id="official-ref-home-title">官方參考</h2>
         {body}
       </section>
     );
@@ -136,7 +184,7 @@ export default function OfficialReference({ boardId, variant = "sidebar" }) {
   return (
     <aside className="official-ref official-ref-sidebar" aria-labelledby="official-ref-title">
       {wide ? (
-        <h2 id="official-ref-title">{heading}</h2>
+        <h2 id="official-ref-title">官方參考</h2>
       ) : (
         <button
           type="button"
@@ -146,8 +194,8 @@ export default function OfficialReference({ boardId, variant = "sidebar" }) {
           aria-controls={bodyId}
           onClick={() => setOpen((value) => !value)}
         >
-          <span className="official-ref-toggle-label">{heading}</span>
-          <span className="official-ref-toggle-hint">AWS 官方文件連結</span>
+          <span className="official-ref-toggle-label">官方參考</span>
+          <span className="official-ref-toggle-hint">Domain 1 Review · Task 1.1 lessons</span>
           <span className="official-ref-toggle-state">{open ? "收合" : "展開"}</span>
         </button>
       )}

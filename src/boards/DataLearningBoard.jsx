@@ -2,6 +2,7 @@ import Term from "../Term.jsx";
 import { useTermContext } from "../TermContext.jsx";
 import ReferenceImage from "../ReferenceImage.jsx";
 import { assetUrl } from "../assetUrl.js";
+import Cue from "../Cue.jsx";
 
 export const TITLE_ZH = "資料類型與學習類型";
 export const TITLE_EN = "Data types and learning types · Task 1.1";
@@ -9,6 +10,7 @@ export const TERM_KEYS = [
   "labeled",
   "unlabeled",
   "structured",
+  "semi-structured",
   "unstructured",
   "tabular",
   "time-series",
@@ -22,14 +24,6 @@ export const TERM_KEYS = [
   "reinforcement",
 ];
 
-function Cue({ termKey, children }) {
-  return (
-    <p className="cue" data-cue={termKey}>
-      {children}
-    </p>
-  );
-}
-
 export default function DataLearningBoard() {
   const { mode } = useTermContext();
   return (
@@ -41,9 +35,10 @@ export default function DataLearningBoard() {
       data-title-en="Data types and learning types · Task 1.1"
     >
       <h2 className="board-title">Data types and learning types</h2>
-      <p className="board-kicker">資料類型與學習類型 · Task 1.1</p>
+      <p className="board-kicker">資料類型與學習類型 · Task 1.1 · Domain 1 Review Lessons 2–3</p>
       <p className="cue-intro">
-        遮住官方英語術語時，請先讀每張卡片上的描述，再估答案。描述會保持可見，但不會寫出該術語本身，也不會用直接對應的中文譯名洩漏答案。
+        When official English terms are covered, read the English description on each card and
+        estimate the answer. Descriptions stay visible and do not name that card’s official term.
       </p>
       <div className="diagram">
         <p className="section-label">Data types · 資料類型</p>
@@ -53,50 +48,79 @@ export default function DataLearningBoard() {
             style={{ padding: "0.85rem", minWidth: "0", borderColor: "var(--blue)", background: "var(--l-blue)" }}
           >
             <Term termKey="labeled" en="Labeled" zh="有標籤" />
-            <Cue termKey="labeled">每筆資料都附有已知的正確答案或目標值，方便模型學習輸入與答案的對應。</Cue>
+            <Cue termKey="labeled">
+              Each example already includes the known desired output, which is also the hard part of
+              preparing this kind of dataset.
+            </Cue>
           </div>
           <div
             className="flow-box"
             style={{ padding: "0.85rem", minWidth: "0", borderColor: "var(--teal)", background: "var(--l-teal)" }}
           >
             <Term termKey="unlabeled" en="Unlabeled" zh="無標籤" />
-            <Cue termKey="unlabeled">資料沒有預先給定的正確答案，模型要自行從中找出規律。</Cue>
+            <Cue termKey="unlabeled">
+              The examples include features but no pre-assigned desired output.
+            </Cue>
           </div>
         </div>
-        <div className="pair">
+        <div className="pair trio">
           <div
             className="flow-box"
             style={{ padding: "0.85rem", minWidth: "0", borderColor: "var(--navy)", background: "var(--l-navy)" }}
           >
             <Term termKey="structured" en="Structured" zh="結構化" />
-            <p className="explain">Has a schema, such as tables</p>
-            <Cue termKey="structured">資料依固定欄位或綱要組織，例如試算表或資料庫中的列與欄。</Cue>
+            <Cue termKey="structured">
+              Stored as rows and columns and usually the easiest to process. Think of CSV files or
+              relational databases such as Amazon RDS and Amazon Redshift, queried with SQL, then
+              exported to Amazon S3 for training.
+            </Cue>
+          </div>
+          <div
+            className="flow-box"
+            style={{ padding: "0.85rem", minWidth: "0", borderColor: "var(--purple)", background: "var(--l-purple)" }}
+          >
+            <Term termKey="semi-structured" en="Semi-structured" zh="半結構化" />
+            <Cue termKey="semi-structured">
+              Does not fully follow ordinary row-and-column rules: items can have different or
+              missing attributes. JSON documents with key-value pairs are a common example. Amazon DynamoDB, plus Amazon DocumentDB (MongoDB compatible), are databases built for this
+              kind of data, which is also exported to Amazon S3 for training.
+            </Cue>
           </div>
           <div className="flow-box" style={{ padding: "0.85rem", minWidth: "0" }}>
             <Term termKey="unstructured" en="Unstructured" zh="非結構化" />
-            <p className="explain">Docs, images, audio, video</p>
-            <Cue termKey="unstructured">沒有固定欄位格式，例如文件、相片、聲音或影片。</Cue>
+            <Cue termKey="unstructured">
+              No specific data model and not a table: photos, video, documents, or social posts,
+              usually kept as objects in Amazon S3. Features may be obtained by processing such as
+              tokenization (splitting writing into words or phrases).
+            </Cue>
           </div>
         </div>
 
         <p className="section-label">Forms of data · 資料形式</p>
-        <p className="form-note">These forms can be labeled or unlabeled.</p>
+        <p className="form-note">These forms can be used with or without a known desired output.</p>
         <div className="chip-row four">
           <div className="inner-card" style={{ borderColor: "var(--navy)" }}>
             <Term termKey="tabular" en="Tabular" zh="表格" />
-            <Cue termKey="tabular">以列與欄排列的一種資料形式；這種形式可以帶或不帶已知答案。</Cue>
+            <Cue termKey="tabular">A row-and-column layout, like a spreadsheet or database table.</Cue>
           </div>
           <div className="inner-card" style={{ borderColor: "var(--navy)" }}>
             <Term termKey="time-series" en="Time-series" zh="時間序列" />
-            <Cue termKey="time-series">依時間先後記錄的資料形式，例如一段時間內反覆量度的數值。</Cue>
+            <Cue termKey="time-series">
+              Each record has a timestamp and is stored in order, used to forecast future trends.
+            </Cue>
           </div>
           <div className="inner-card" style={{ borderColor: "var(--navy)" }}>
             <Term termKey="image" en="Image" zh="影像" />
-            <Cue termKey="image">由像素組成的視覺資料形式，例如相片或畫面。</Cue>
+            <Cue termKey="image">
+              Visual examples such as photos or frames; pixels can serve as features.
+            </Cue>
           </div>
           <div className="inner-card" style={{ borderColor: "var(--navy)" }}>
             <Term termKey="text" en="Text" zh="文字" />
-            <Cue termKey="text">以語句、段落或文件寫成的語言資料形式。</Cue>
+            <Cue termKey="text">
+              Written language in files or posts; features may come from splitting it into words or
+              phrases.
+            </Cue>
           </div>
         </div>
 
@@ -109,18 +133,26 @@ export default function DataLearningBoard() {
             <div>
               <Term termKey="supervised" en="Supervised" zh="監督式學習" />
             </div>
-            <p className="explain">Uses labeled data</p>
-            <Cue termKey="supervised">使用已附上正確答案的資料來學習。</Cue>
+            <Cue termKey="supervised">
+              You specify both the input and the desired output using pre-assigned answers. A course
+              example is deciding whether a photo is a fish or not. The model’s output is a
+              probability, and preparing those answers is the main challenge. Amazon SageMaker
+              Ground Truth and Amazon Mechanical Turk are named as labeling help.
+            </Cue>
             <div className="methods two">
               <div className="method" style={{ color: "var(--blue)" }}>
                 <Term termKey="regression" en="Regression" zh="回歸" />
-                <p className="explain">Continuous value</p>
-                <Cue termKey="regression">用來預測一個連續變化的數值。</Cue>
+                <Cue termKey="regression">
+                  Finds a best-fit relationship that can predict a continuous number, such as a line
+                  y = mx + b whose slope and intercept are adjusted to shrink errors.
+                </Cue>
               </div>
               <div className="method" style={{ color: "var(--blue)" }}>
                 <Term termKey="classification" en="Classification" zh="分類" />
-                <p className="explain">Category</p>
-                <Cue termKey="classification">用來判斷資料屬於哪一個類別。</Cue>
+                <Cue termKey="classification">
+                  Assigns an example to a category, for instance deciding whether a photo shows a
+                  fish or not.
+                </Cue>
               </div>
             </div>
           </div>
@@ -131,13 +163,18 @@ export default function DataLearningBoard() {
             <div>
               <Term termKey="unsupervised" en="Unsupervised" zh="非監督式學習" />
             </div>
-            <p className="explain">Uses unlabeled data</p>
-            <Cue termKey="unsupervised">使用沒有預先給定正確答案的資料來學習。</Cue>
+            <Cue termKey="unsupervised">
+              Features are present but no pre-assigned answers. The method finds patterns, clusters,
+              or groups, and is useful for pattern recognition, spotting unusual cases, and grouping
+              (for example, kinds of network traffic, or a sensor reading far from the usual range).
+            </Cue>
             <div className="methods">
               <div className="method" style={{ color: "var(--teal)" }}>
                 <Term termKey="clustering" en="Clustering" zh="分群" />
-                <p className="explain">Typical example</p>
-                <Cue termKey="clustering">這類學習一個常見例子：把彼此相似的資料歸在一起。</Cue>
+                <Cue termKey="clustering">
+                  A typical way to group similar examples, such as different kinds of network
+                  traffic.
+                </Cue>
               </div>
             </div>
           </div>
@@ -145,10 +182,10 @@ export default function DataLearningBoard() {
 
         <div className="reinforce">
           <Term termKey="reinforcement" en="Reinforcement" zh="強化學習" />
-          <p className="explain">Learns by trial and error with rewards and penalties.</p>
-          <p className="explain">Not mapped from labeled or unlabeled data in the same way.</p>
           <Cue termKey="reinforcement">
-            透過嘗試與錯誤來學習，並依獎勵與懲罰調整行為。它不是用與「有／無已知答案」相同的方式來對應。
+            An agent takes actions in an environment toward a goal, learning by trial and error with
+            rewards, and without pre-assigned input answers. It may sometimes try actions that are
+            not rewarded. Unlike grouping methods, there is a predetermined end goal. The course example is AWS DeepRacer: the race car plays the agent role, and the racetrack is its environment.
           </Cue>
         </div>
       </div>
