@@ -42,14 +42,14 @@ export default function App() {
           <p>{isHome ? "Domain 1 · Task 1.1" : boardMeta.titleEn}</p>
         </div>
       </header>
-      <main id="main">
+      <main id="main" className={isHome ? "main-home" : "main-board"}>
         {isHome ? (
           <Home onOpen={navigate} />
         ) : (
           <BoardView key={route} boardId={route} />
         )}
       </main>
-      <footer className="app-footer">
+      <footer className={isHome ? "app-footer" : "app-footer app-footer-wide"}>
         <p>
           這是個人學習輔助，不是 AWS 官方文件。This is a personal study aid, not an official AWS
           document.

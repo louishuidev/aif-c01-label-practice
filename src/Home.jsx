@@ -1,3 +1,5 @@
+import OfficialReference from "./OfficialReference.jsx";
+
 const CARDS = [
   {
     id: "hierarchy",
@@ -52,9 +54,11 @@ export default function Home({ onOpen }) {
           <li>選一張練習圖，預設是「逐個揭開」：全部官方英語術語先遮住。</li>
           <li>先嘗試回想術語，再點（或用鍵盤 Enter／空白鍵）揭開核對。</li>
           <li>「顯示全部」會揭開所有標籤；「全部遮住」只遮住、點擊不會揭開，方便先看結構。</li>
-          <li>「重新遮住」會再次遮蓋所有術語。繁體中文提示會與對應英語術語一併遮蓋，避免直接洩漏答案。</li>
+          <li>「重新遮住」會再次遮蓋所有術語。與術語一併顯示的短中文提示會被遮蓋，避免直接洩漏答案。</li>
+          <li>在「資料類型與學習類型」一頁，每張卡片另有較詳的描述；遮住標籤時描述仍可閱讀，用來估官方術語，但不會寫出該答案。</li>
         </ol>
       </div>
+      <OfficialReference variant="home" />
     </section>
   );
 }
